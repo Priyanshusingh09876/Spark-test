@@ -15,9 +15,12 @@ function visitSeries(map: Record<string, number>): { label: string; value: numbe
   return ordered.map((v) => ({ label: v, value: map[v] }));
 }
 
-function fmt(v: number | Record<string, number>, unit: string): string {
+function fmt(v: number | Record<string, number> | null, unit: string): string {
+  // The backend sends null for a statistic it could not compute, e.g. mean
+  // change from baseline on a study with no Day 1 or Week 12 visit.
+  if (v === null || v === undefined) return "not available";
   if (typeof v !== "number") return JSON.stringify(v);
-  if (Number.isNaN(v)) return "n/a";
+  if (Number.isNaN(v)) return "not available";
   return `${v.toFixed(1)}${unit ? ` ${unit}` : ""}`;
 }
 
@@ -61,7 +64,11 @@ export default function Dashboard() {
   const s = ex.summary;
   const hasData = d.data.readings > 0;
   const perVisitStat = d.stats.find((x) => x.name === "subjects_per_visit");
-  const perVisit = perVisitStat && typeof perVisitStat.app === "object" ? visitSeries(perVisitStat.app) : [];
+  // typeof null is "object", so the null check has to come first
+  const perVisit =
+    perVisitStat && perVisitStat.app !== null && typeof perVisitStat.app === "object"
+      ? visitSeries(perVisitStat.app)
+      : [];
   const scalars = d.stats.filter((x): x is StatResult => x.kind === "scalar");
 
   return (

@@ -36,3 +36,8 @@ Screenshot*.png
 deck_images/
 /ecrf_architecture.png
 docs/architecture.png
+
+# personal files, never publish
+jigar_resume.pdf
+*resume*.pdf
+*_resume.*

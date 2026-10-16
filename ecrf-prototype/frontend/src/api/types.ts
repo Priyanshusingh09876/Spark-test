@@ -128,8 +128,9 @@ export interface StatResult {
   label: string;
   unit: string;
   kind: "scalar" | "by_visit";
-  app: number | Record<string, number>;
-  independent: number | Record<string, number>;
+  // null when the statistic could not be computed for this protocol
+  app: number | Record<string, number> | null;
+  independent: number | Record<string, number> | null;
   pass: boolean;
 }
 

@@ -24,6 +24,23 @@ router = APIRouter(prefix="/api/dashboard", tags=["dashboard"])
 TOLERANCE = 0.01
 
 
+def _jsonable(v):
+    """Replace NaN and infinity with None so the response can be serialised.
+
+    A calculation legitimately returns NaN when it has nothing to work on.
+    Mean change from baseline, for example, needs a subject to have both a
+    Day 1 and a Week 12 reading; a protocol whose visits are named anything
+    else yields no pairs at all. json.dumps then refuses the value and the
+    whole dashboard returns 500, which reads as the app being broken rather
+    than the statistic being unavailable.
+    """
+    if isinstance(v, dict):
+        return {k: _jsonable(x) for k, x in v.items()}
+    if isinstance(v, float) and not math.isfinite(v):
+        return None
+    return v
+
+
 def _close(a, b) -> bool:
     if isinstance(a, dict) and isinstance(b, dict):
         return a == b
@@ -71,7 +88,10 @@ def dashboard(protocol_id: int, s: Session = Depends(db.get_session)):
             ind_val = ind_fn(config.database_url, protocol_id)
             stats.append({
                 "name": name, "label": meta["label"], "unit": meta["unit"], "kind": meta["kind"],
-                "app": app_val, "independent": ind_val, "pass": _close(app_val, ind_val),
+                # The pass/fail comparison runs on the raw values, so two NaNs
+                # still agree with each other; only the response is sanitised.
+                "app": _jsonable(app_val), "independent": _jsonable(ind_val),
+                "pass": _close(app_val, ind_val),
             })
         subjects = int(df.subject_id.nunique())
         readings = len(df)
