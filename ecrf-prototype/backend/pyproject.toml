@@ -33,3 +33,29 @@ testpaths = ["tests"]
 
 [tool.ruff]
 line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+# Pinned explicitly so CI fails for the same reasons on every ruff version,
+# rather than inheriting whatever that version happens to enable by default.
+select = [
+    "E",      # pycodestyle errors
+    "F",      # pyflakes: undefined names, unused imports
+    "I",      # import sorting
+    "UP",     # outdated syntax for the target Python
+    "B",      # bugbear: likely mistakes
+    "C4",     # comprehension and literal clarity
+    "RUF",    # ruff's own checks
+]
+ignore = [
+    # Depends(), File() and Header() in parameter defaults are how FastAPI
+    # declares dependencies. B008 flags all of them, and the suggested fix
+    # breaks the framework, so it is off for the whole project.
+    "B008",
+    # A line slightly over the limit is not worth failing a build for; the
+    # formatter handles wrapping.
+    "E501",
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["ecrf"]

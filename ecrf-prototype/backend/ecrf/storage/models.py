@@ -1,7 +1,16 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
-from sqlalchemy import (JSON, Boolean, DateTime, Float, ForeignKey, Integer,
-                        String, Text, UniqueConstraint)
+from sqlalchemy import (
+    JSON,
+    Boolean,
+    DateTime,
+    Float,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    UniqueConstraint,
+)
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -23,7 +32,7 @@ class Protocol(Base):
     pages: Mapped[int] = mapped_column(Integer)
     tokens_estimate: Mapped[int] = mapped_column(Integer)
     uploaded_by: Mapped[str] = mapped_column(String(100))
-    uploaded_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
+    uploaded_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(UTC))
 
 
 class ECRFVersion(Base):
@@ -45,7 +54,7 @@ class ECRFVersion(Base):
     version: Mapped[int] = mapped_column(Integer)
     content: Mapped[dict] = mapped_column(JSON)         # DraftECRF as dict
     created_by: Mapped[str] = mapped_column(String(100))
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(UTC))
     note: Mapped[str | None] = mapped_column(String(500), nullable=True)
 
 
@@ -70,4 +79,4 @@ class Observation(Base):
     value_text: Mapped[str | None] = mapped_column(String(500), nullable=True)
     synthetic: Mapped[bool] = mapped_column(Boolean, default=True)
     entered_by: Mapped[str] = mapped_column(String(100))
-    entered_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
+    entered_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(UTC))

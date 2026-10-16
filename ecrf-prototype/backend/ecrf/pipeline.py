@@ -9,7 +9,6 @@ the first returns would make them all miss.
 """
 
 import time
-from dataclasses import asdict
 
 from ecrf import cdash, sections, verify
 from ecrf.config import config

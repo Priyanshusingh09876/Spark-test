@@ -4,11 +4,11 @@ import os
 
 os.environ["ECRF_BACKEND"] = "mock"
 
-from fastapi.testclient import TestClient  # noqa: E402
+from fastapi.testclient import TestClient
 
-from ecrf.api.app import app  # noqa: E402
-from ecrf.ingest import load  # noqa: E402
-from ecrf.verify import locate  # noqa: E402
+from ecrf.api.app import app
+from ecrf.ingest import load
+from ecrf.verify import locate
 
 SAMPLE = os.path.join(os.path.dirname(__file__), "..", "data", "sample", "PHX-401-201_protocol.pdf")
 

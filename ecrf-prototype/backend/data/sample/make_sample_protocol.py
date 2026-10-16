@@ -16,8 +16,7 @@ from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import inch
-from reportlab.platypus import (PageBreak, Paragraph, SimpleDocTemplate,
-                                Spacer, Table, TableStyle)
+from reportlab.platypus import PageBreak, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
 OUT = Path(__file__).parent / "PHX-401-201_protocol.pdf"
 
@@ -34,7 +33,8 @@ SUB = ParagraphStyle("SUB", parent=ss["Normal"], fontName="Helvetica",
                      fontSize=10, textColor=colors.grey, spaceAfter=24)
 
 s = []
-p = lambda t, st=B: s.append(Paragraph(t, st))
+def p(t, st=B):
+    s.append(Paragraph(t, st))
 
 # ---------------------------------------------------------------- cover
 p("Clinical Study Protocol PHX-401-201", T)

@@ -18,7 +18,7 @@ from ecrf.storage.models import Protocol
 # The verification package deliberately lives outside ecrf/ and imports
 # nothing from it. We import it here only to compare.
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from verification import expected_results as independent  # noqa: E402
+from verification import expected_results as independent
 
 router = APIRouter(prefix="/api/dashboard", tags=["dashboard"])
 TOLERANCE = 0.01
@@ -74,7 +74,7 @@ def dashboard(protocol_id: int, s: Session = Depends(db.get_session)):
                 "app": app_val, "independent": ind_val, "pass": _close(app_val, ind_val),
             })
         subjects = int(df.subject_id.nunique())
-        readings = int(len(df))
+        readings = len(df)
     else:
         subjects, readings = 0, 0
 
@@ -88,9 +88,9 @@ def unsupported(protocol_id: int, name: str):
     registry is rejected, never approximated."""
     try:
         registry.run(name, registry.load_frame(next(db.get_session()), protocol_id))
-    except registry.UnsupportedAnalysis:
+    except registry.UnsupportedAnalysis as e:
         raise HTTPException(
             403, f"'{name}' is not an approved calculation. The approved set is: "
                  f"{', '.join(registry.CALCULATIONS)}. Adding one means writing, testing "
-                 f"and independently verifying it first.")
+                 f"and independently verifying it first.") from e
     return {"error": "should not reach here"}

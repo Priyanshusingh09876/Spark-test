@@ -83,6 +83,34 @@ test_protocols/      two real protocols from ClinicalTrials.gov
 BUILD.md             the full original specification
 ```
 
+## Continuous integration
+
+`.github/workflows/ci.yml` runs on every push and pull request to `main`.
+
+```
+lint ─┐
+      ├─► build
+test ─┘
+```
+
+| Stage | What it does | Fails when |
+| --- | --- | --- |
+| Lint | `ruff` over the backend, `eslint` over the frontend | any lint error |
+| Test | `pytest` against the offline mock backend | any test fails |
+| Build | `tsc` type-check then `vite` bundle | type or bundle error |
+
+Linting and testing run in parallel; the build declares `needs: [lint, test]`
+so a bundle is only ever produced from code that passed both. The test job
+publishes a pass/fail table to the run summary and uploads its JUnit XML;
+the build job uploads the bundle.
+
+Run the same checks locally:
+
+```bash
+cd ecrf-prototype/backend  && ruff check . && pytest -v
+cd ecrf-prototype/frontend && npm run lint && npm run build
+```
+
 ## Finding protocols to test with
 
 Completed trials on ClinicalTrials.gov publish their protocol documents.

@@ -79,7 +79,7 @@ async def upload(file: UploadFile = File(...), x_user: str | None = Header(None)
         doc = ingest.load(str(dest))
     except ingest.ScannedPDFError as e:
         dest.unlink(missing_ok=True)
-        raise HTTPException(422, str(e))
+        raise HTTPException(422, str(e)) from e
 
     name = Path(file.filename).stem.replace("_", " ")
     p = Protocol(
@@ -132,7 +132,7 @@ def extract(protocol_id: int, backend: str | None = None,
     try:
         draft = pipeline.run(str(pdf_path), protocol_id, backend=backend, doc=doc, log=lambda *_: None)
     except Exception as e:  # surface provider errors plainly
-        raise HTTPException(502, f"extraction failed: {type(e).__name__}: {e}")
+        raise HTTPException(502, f"extraction failed: {type(e).__name__}: {e}") from e
     v = db.save_version(s, p, draft.model_dump(), _user(x_user), note="initial extraction")
     s.commit()
     return {"version": v.version, "summary": draft.summary}

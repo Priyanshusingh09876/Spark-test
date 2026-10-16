@@ -36,7 +36,8 @@ class OpenAICompatExtractor:
 
     # ---------------------------------------------------------- internals
     def _chat(self, messages: list[dict]) -> str:
-        kwargs = dict(model=self.model, messages=messages, temperature=self.temperature)
+        kwargs = {"model": self.model, "messages": messages,
+                  "temperature": self.temperature}
         try:
             resp = self.client.chat.completions.create(
                 response_format={"type": "json_object"}, **kwargs)
@@ -50,7 +51,8 @@ class OpenAICompatExtractor:
         try:
             return model_cls.model_validate(json.loads(_FENCE.sub("", raw).strip()))
         except (json.JSONDecodeError, ValidationError) as e:
-            retry = messages + [
+            retry = [
+                *messages,
                 {"role": "assistant", "content": raw},
                 {"role": "user", "content": (
                     f"That response was invalid: {e}\n"

@@ -35,7 +35,7 @@ def generate(protocol_id: int, n: int = 20, seed: int = 401) -> list[Observation
         add(subj, "Screening", "Sex", text=rng.choice(["Male", "Female"]))
         add(subj, "Screening", "Height", num=round(rng.uniform(155, 188), 1))
 
-        for v_idx, visit in enumerate(VISITS):
+        for visit in VISITS:
             if visit == "Week 12" and subj in DROPOUTS | LATE_DROPOUT:
                 continue
             if visit == "Week 4" and subj in LATE_DROPOUT:

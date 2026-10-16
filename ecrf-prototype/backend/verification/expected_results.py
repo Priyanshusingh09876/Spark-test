@@ -35,7 +35,7 @@ def mean_change_systolic(database_url: str, protocol_id: int) -> float:
         acc[subj][visit].append(val)
 
     diffs = []
-    for subj, visits in acc.items():
+    for visits in acc.values():
         if "Day 1" in visits and "Week 12" in visits:
             b = sum(visits["Day 1"]) / len(visits["Day 1"])
             e = sum(visits["Week 12"]) / len(visits["Week 12"])
@@ -51,7 +51,7 @@ def subjects_per_visit(database_url: str, protocol_id: int) -> dict[str, int]:
         "WHERE protocol_id=? GROUP BY visit", (protocol_id,),
     ).fetchall()
     con.close()
-    return {v: n for v, n in rows}
+    return dict(rows)
 
 
 def percent_missing(database_url: str, protocol_id: int) -> float:
