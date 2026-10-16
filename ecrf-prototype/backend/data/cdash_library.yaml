@@ -1,0 +1,380 @@
+# CDASH field library.
+#
+# Field names, codelists and edit-check ranges follow CDASH Implementation
+# Guide v2.0 and SDTM Implementation Guide v3.3, both public CDISC
+# standards. It was transcribed against the client's own CRF library,
+# which is NOT part of this repository.
+#
+# This file replaces the earlier seed that was written from general
+# knowledge. Variable names, codelists and edit-check ranges below are
+# taken from the client document. Where the client document gives no
+# range (e.g. temperature, laboratory analytes with lab-provided normal
+# ranges) min/max are left unset rather than guessed.
+#
+# `cdash` is the CDASH collection variable (e.g. SYSBP) or, for findings
+# domains where one variable carries many tests, the --TESTCD value
+# (e.g. QTCF, GLUC). `name` and `aliases` are what the matcher searches;
+# the protocol-facing name is kept as `name` so recorded fixtures and
+# model output still match.
+#
+# Enrichment is deterministic and never adds fields the model did not
+# produce. It attaches codes and fills missing type/unit/range/choices.
+#
+# Not yet carried over from the client document (no sample protocol
+# needs them yet): MH, CM, IE, DS, EX/DA, DV, PR, HO, CE, SD modules.
+
+domains:
+  DM:
+    label: Demographics (ENRL-002)
+    triggers: [demographics, date of birth, sex, race, ethnicity, country]
+    fields:
+      - name: Date of Birth
+        cdash: BRTHDAT
+        aliases: [DOB, Birth Date, Subject's Date of Birth]
+        type: date
+      - name: Sex
+        cdash: SEX
+        aliases: [Gender, Sex at Birth, Subject's Sex at Birth]
+        type: choice
+        choices: [M, F, U, UNDIFFERENTIATED]
+      - name: Race
+        cdash: RACE
+        aliases: [Subject's Race]
+        type: choice
+        choices: [AMERICAN INDIAN OR ALASKA NATIVE, ASIAN, BLACK OR AFRICAN AMERICAN,
+                  NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER, WHITE, MULTIPLE, OTHER,
+                  UNKNOWN, NOT REPORTED]
+      - name: Ethnicity
+        cdash: ETHNIC
+        aliases: [Subject's Ethnicity]
+        type: choice
+        choices: [HISPANIC OR LATINO, NOT HISPANIC OR LATINO, UNKNOWN, NOT REPORTED]
+      - name: Country of Residence
+        cdash: COUNTRY
+        aliases: [Country, Country of Subject's Residence]
+        type: text
+
+  VS:
+    label: Vital Signs (SAFE-006)
+    triggers: [vital signs, blood pressure, heart rate, pulse, temperature,
+               respiratory rate, oxygen saturation, weight, height, bmi, body mass]
+    fields:
+      - name: Vital Signs Date
+        cdash: VSDTC
+        aliases: [Assessment Date/Time, Date and Time of Vital Signs Assessment, Vital Signs Date/Time]
+        type: date
+      - name: Position
+        cdash: VSPOS
+        aliases: [Subject Position, Body Position, Posture, Subject Position During Assessment]
+        type: choice
+        choices: [SITTING, STANDING, SUPINE]
+      - name: Time Point
+        cdash: VSTPT
+        aliases: [Time Point of Assessment, Vital Signs Time Point]
+        type: choice
+        choices: [SCREENING, BASELINE, PRE-DOSE, POST-DOSE 1H, POST-DOSE 2H, POST-DOSE 4H,
+                  END OF TREATMENT, FOLLOW-UP]
+      - name: Systolic Blood Pressure
+        cdash: SYSBP
+        aliases: [Systolic BP, SBP, Systolic]
+        type: integer
+        unit: mmHg
+        min: 60
+        max: 260
+      - name: Diastolic Blood Pressure
+        cdash: DIABP
+        aliases: [Diastolic BP, DBP, Diastolic]
+        type: integer
+        unit: mmHg
+        min: 40
+        max: 160
+      - name: Heart Rate
+        cdash: PULSE
+        aliases: [Pulse, Pulse Rate, HR, Heart Rate / Pulse]
+        type: integer
+        unit: beats/min
+        min: 20
+        max: 250
+      - name: Respiratory Rate
+        cdash: RESP
+        aliases: [RR, Breathing Rate, Respiration Rate]
+        type: integer
+        unit: breaths/min
+        min: 6
+        max: 60
+      - name: Temperature
+        cdash: TEMP
+        aliases: [Body Temperature, Temp]
+        type: decimal
+        unit: C
+      - name: Oxygen Saturation
+        cdash: OXYSAT
+        aliases: [SpO2, Pulse Oximetry, O2 Saturation]
+        type: integer
+        unit: "%"
+        min: 50
+        max: 100
+      - name: Weight
+        cdash: WEIGHT
+        aliases: [Body Weight, Wt]
+        type: decimal
+        unit: kg
+        min: 2
+        max: 300
+      - name: Height
+        cdash: HEIGHT
+        aliases: [Body Height, Ht]
+        type: decimal
+        unit: cm
+        min: 50
+        max: 250
+      - name: Body Mass Index
+        cdash: BMI
+        aliases: [BMI]
+        type: decimal
+        unit: kg/m2
+        min: 10
+        max: 80
+
+  EG:
+    label: 12-Lead Electrocardiogram (SAFE-007)
+    triggers: [ecg, electrocardiogram, qt interval, qtc, qtcf]
+    fields:
+      - name: ECG Date
+        cdash: EGDTC
+        aliases: [ECG Date/Time, Date and Time of ECG Collection]
+        type: date
+      - name: ECG Method
+        cdash: EGMETHOD
+        aliases: [ECG Collection Method]
+        type: choice
+        choices: [12-LEAD STANDARD, HOLTER, CONTINUOUS MONITORING]
+      - name: RR Interval
+        cdash: RR
+        aliases: [RR]
+        type: integer
+        unit: msec
+        min: 200
+        max: 2000
+      - name: PR Interval
+        cdash: PR
+        aliases: [PR]
+        type: integer
+        unit: msec
+        min: 60
+        max: 400
+      - name: QRS Duration
+        cdash: QRS
+        aliases: [QRS, QRS Interval]
+        type: integer
+        unit: msec
+        min: 40
+        max: 300
+      - name: QT Interval
+        cdash: QT
+        aliases: [QT, Uncorrected QT]
+        type: integer
+        unit: msec
+        min: 200
+        max: 700
+      - name: QTcF Interval
+        cdash: QTCF
+        aliases: [QTcF, QTc, Corrected QT, QTc Interval, Fridericia QTc]
+        type: integer
+        unit: msec
+        min: 250
+        max: 700
+      - name: ECG Heart Rate
+        cdash: EGHR
+        aliases: [Heart Rate (ECG), Heart Rate from ECG, Ventricular Rate]
+        type: integer
+        unit: beats/min
+        min: 20
+        max: 250
+      - name: ECG Result
+        cdash: EGINTPR
+        aliases: [Overall ECG Interpretation, ECG Interpretation, ECG Finding, ECG Findings]
+        type: choice
+        choices: [NORMAL, ABNORMAL - NOT CLINICALLY SIGNIFICANT, ABNORMAL - CLINICALLY SIGNIFICANT]
+      - name: ECG Read
+        cdash: EGCNTRD
+        aliases: [Central vs. Local Read, ECG Read Centrally or Locally]
+        type: choice
+        choices: [CENTRAL, LOCAL]
+
+  LB:
+    label: Laboratory Assessments (SAFE-008)
+    triggers: [laboratory, lab, hba1c, glucose, haemoglobin, hemoglobin,
+               creatinine, blood sample, chemistry, hematology]
+    # The client form collects one LBORRES row per LBTESTCD with
+    # lab-provided normal ranges (LBNRLO/LBNRHI), so no min/max here.
+    # Analytes and units are from the panels listed under SAFE-008.
+    fields:
+      - name: Lab Collection Date
+        cdash: LBDTC
+        aliases: [Collection Date/Time, Date and Time of Sample Collection, Sample Collection Date]
+        type: date
+      - name: Fasting Status
+        cdash: LBFAST
+        aliases: [Was Subject Fasting, Fasting]
+        type: boolean
+      - name: Sample Collected
+        cdash: LBSTAT
+        aliases: [Blood Sample Collected, Lab Sample Taken, Lab Sample Collected]
+        type: boolean
+      - name: Fasting Plasma Glucose
+        cdash: GLUC
+        aliases: [FPG, Fasting Glucose, Glucose, Plasma Glucose]
+        type: decimal
+        unit: mg/dL
+      # HbA1c is not in the CRF-LIB-001 panels. Kept because the sample
+      # protocol collects it; code is the CDISC LBTESTCD. Confirm with client.
+      - name: HbA1c
+        cdash: HBA1C
+        aliases: [Glycated Haemoglobin, Glycated Hemoglobin, A1c, Hemoglobin A1c]
+        type: decimal
+        unit: "%"
+      - name: Hemoglobin
+        cdash: HGB
+        aliases: [Haemoglobin, Hb]
+        type: decimal
+        unit: g/dL
+      - name: Hematocrit
+        cdash: HCT
+        aliases: [Haematocrit]
+        type: decimal
+        unit: "%"
+      - name: White Blood Cell Count
+        cdash: WBC
+        aliases: [WBC, Leukocytes]
+        type: decimal
+        unit: 10^3/uL
+      - name: Platelet Count
+        cdash: PLAT
+        aliases: [Platelets]
+        type: decimal
+        unit: 10^3/uL
+      - name: Sodium
+        cdash: SODIUM
+        aliases: [Na]
+        type: decimal
+        unit: mEq/L
+      - name: Potassium
+        cdash: K
+        aliases: [K]
+        type: decimal
+        unit: mEq/L
+      - name: Creatinine
+        cdash: CREAT
+        aliases: [Serum Creatinine]
+        type: decimal
+        unit: mg/dL
+      - name: eGFR
+        cdash: EGFR
+        aliases: [Estimated GFR, Estimated Glomerular Filtration Rate]
+        type: decimal
+        unit: mL/min/1.73m2
+      - name: ALT
+        cdash: ALT
+        aliases: [Alanine Aminotransferase, SGPT]
+        type: decimal
+        unit: U/L
+      - name: AST
+        cdash: AST
+        aliases: [Aspartate Aminotransferase, SGOT]
+        type: decimal
+        unit: U/L
+      - name: Alkaline Phosphatase
+        cdash: ALP
+        aliases: [ALP]
+        type: decimal
+        unit: U/L
+      - name: Total Bilirubin
+        cdash: BILI
+        aliases: [Bilirubin]
+        type: decimal
+        unit: mg/dL
+      - name: Serum Pregnancy Test
+        cdash: HCG
+        aliases: [Beta-hCG, Pregnancy Test, Serum beta-hCG]
+        type: decimal
+        unit: mIU/mL
+
+  AE:
+    label: Adverse Events (SAFE-003)
+    triggers: [adverse event, side effect, ae, serious adverse, sae]
+    fields:
+      - name: Adverse Event Term
+        cdash: AETERM
+        aliases: [AE Term, Event, Adverse Event, Adverse Event / Symptom / Sign]
+        type: text
+      - name: Serious Adverse Event
+        cdash: AESER
+        aliases: [Serious AE Flag, Is this a Serious Adverse Event, Serious]
+        type: boolean
+      - name: AE Severity
+        cdash: AESEV
+        aliases: [Severity, Severity of Adverse Event, Intensity]
+        type: choice
+        choices: [MILD, MODERATE, SEVERE]
+      - name: AE Toxicity Grade
+        cdash: AETOXGR
+        aliases: [Toxicity Grade, CTCAE Grade, Grade]
+        type: choice
+        choices: ["1", "2", "3", "4", "5"]
+      - name: AE Relationship to Study Drug
+        cdash: AEREL
+        aliases: [Relationship to IP, Causality, Relationship to Investigational Product, Relatedness]
+        type: choice
+        choices: [NOT RELATED, UNLIKELY RELATED, POSSIBLY RELATED, PROBABLY RELATED, DEFINITELY RELATED]
+      - name: AE Action Taken
+        cdash: AEACN
+        aliases: [Action Taken, Action Taken with Investigational Product]
+        type: choice
+        choices: [DOSE NOT CHANGED, DOSE REDUCED, DRUG INTERRUPTED, DRUG WITHDRAWN, NOT APPLICABLE, UNKNOWN]
+      - name: AE Outcome
+        cdash: AEOUT
+        aliases: [Outcome, Outcome of Adverse Event]
+        type: choice
+        choices: [RECOVERED/RESOLVED, RECOVERING/RESOLVING, NOT RECOVERED/NOT RESOLVED,
+                  RECOVERED/RESOLVED WITH SEQUELAE, FATAL, UNKNOWN]
+      - name: AE Start Date
+        cdash: AESTDTC
+        aliases: [Onset Date, Start Date, AE Onset Date]
+        type: date
+      - name: AE End Date
+        cdash: AEENDTC
+        aliases: [Resolution Date, Stop Date, Date AE Resolved]
+        type: date
+      - name: AE Ongoing
+        cdash: AEONGO
+        aliases: [Ongoing at End of Study, Is AE ongoing]
+        type: boolean
+      - name: AE Resulted in Death
+        cdash: AESDTH
+        aliases: [Death, Did AE result in death]
+        type: boolean
+      - name: AE Life-Threatening
+        cdash: AESLIFE
+        aliases: [Life-Threatening]
+        type: boolean
+      - name: AE Required Hospitalization
+        cdash: AESHOSP
+        aliases: [Hospitalization, Hospitalisation]
+        type: boolean
+      - name: AE Disability
+        cdash: AESDISAB
+        aliases: [Disability / Incapacity, Persistent Disability]
+        type: boolean
+      - name: AE Congenital Anomaly
+        cdash: AESCONG
+        aliases: [Congenital Anomaly, Birth Defect]
+        type: boolean
+      - name: AE Medically Important
+        cdash: AESMIE
+        aliases: [Medically Important Event, Other Medically Important]
+        type: boolean
+      - name: AE Treatment Given
+        cdash: AECONTRT
+        aliases: [Concomitant Treatment Given, Treatment for AE]
+        type: boolean

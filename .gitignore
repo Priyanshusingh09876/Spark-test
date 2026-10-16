@@ -1,0 +1,38 @@
+# ---- secrets -------------------------------------------------------
+.env
+*.key
+
+# ---- client material, deliberately NOT published --------------------
+# The client's CRF library and the meeting decks are internal documents.
+# The pipeline needs the CDASH library at
+# ecrf-prototype/backend/data/cdash_library.yaml, which follows public
+# CDISC standards and is committed. The source document is not.
+*.docx
+*.pptx
+~$*
+
+# ---- python ---------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# ---- app data (regenerated on first run) ----------------------------
+ecrf-prototype/backend/ecrf.db
+ecrf-prototype/backend/data/uploads/
+ecrf-prototype/backend/data/protocols/*.pdf
+
+# ---- node / build ---------------------------------------------------
+node_modules/
+dist/
+*.tsbuildinfo
+
+# ---- os -------------------------------------------------------------
+.DS_Store
+
+Screenshot*.png
+deck_images/
+/ecrf_architecture.png
+docs/architecture.png

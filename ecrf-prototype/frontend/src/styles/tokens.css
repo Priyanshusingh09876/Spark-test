@@ -1,0 +1,70 @@
+/* Design tokens. The only place colours, type and spacing are defined.
+   Components reference these, never raw values.
+
+   Palette is tuned to the Phoenix Clinical logo: slate grey wordmark
+   (#687078) and a soft sky blue (#80b0c8). */
+
+:root {
+  /* palette */
+  --ink: #1f2c33;
+  --ink-2: #33454f;
+  --paper: #f4f6f7;
+  --card: #ffffff;
+  --line: #dfe5e8;
+  --line-strong: #c3ccd1;
+  --muted: #5c6b73;
+  --muted-2: #8e9aa1;
+
+  /* brand, from the logo */
+  --brand: #5e9fbc;
+  --brand-bg: #e8f2f7;
+  --brand-ink: #255468;
+
+  --teal: #1f7a6b;
+  --teal-bg: #dcefea;
+  --teal-ink: #0f3d35;
+
+  --amber: #ba7517;
+  --amber-bg: #fbf0dc;
+  --amber-ink: #633806;
+
+  --rust: #bf5632;
+  --rust-bg: #f9e8e0;
+  --rust-ink: #6b2e16;
+
+  --accent: #80b0c8;
+
+  /* elevation, kept very soft */
+  --shadow-1: 0 1px 2px rgba(31, 44, 51, 0.04), 0 1px 1px rgba(31, 44, 51, 0.03);
+  --shadow-2: 0 4px 16px rgba(31, 44, 51, 0.08), 0 1px 3px rgba(31, 44, 51, 0.05);
+  --shadow-3: 0 12px 40px rgba(31, 44, 51, 0.14);
+  --ring: 0 0 0 3px rgba(94, 159, 188, 0.28);
+
+  /* motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --fast: 140ms;
+  --normal: 220ms;
+
+  /* type */
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+  --text-xs: 12px;
+  --text-sm: 13.5px;
+  --text-md: 15px;
+  --text-lg: 18px;
+  --text-xl: 24px;
+  --text-2xl: 32px;
+
+  /* spacing */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+
+  --radius: 8px;
+  --radius-lg: 12px;
+  --sidebar: 240px;
+}

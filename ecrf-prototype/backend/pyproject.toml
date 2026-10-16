@@ -1,0 +1,35 @@
+[project]
+name = "ecrf-backend"
+version = "0.1.0"
+description = "Protocol to draft eCRF pipeline with grounded verification"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "python-multipart>=0.0.12",
+    "pydantic>=2.9",
+    "sqlalchemy>=2.0",
+    "pdfplumber>=0.11",
+    "rapidfuzz>=3.10",
+    "pandas>=2.2",
+    "pyyaml>=6.0",
+    "openai>=1.54",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3", "httpx>=0.27", "ruff>=0.7"]
+postgres = ["psycopg[binary]>=3.2"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["ecrf"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100

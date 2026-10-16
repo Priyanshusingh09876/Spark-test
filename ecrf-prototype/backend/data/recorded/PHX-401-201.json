@@ -1,0 +1,128 @@
+{
+  "_comment": "Recorded extraction for the bundled sample protocol. Used by ECRF_BACKEND=mock so the demo runs with no API key. Three things are planted: a FABRICATED Heart Rate field at Week 4 whose quote is not in the protocol (grounding check should delete it), a PARAPHRASED quote on Week 4 Diastolic ('five minutes' vs '5 minutes', should pass tier 2 as approximate), and a CONFLICTING flag on Week 4 Systolic (5 vs 10 minute rest).",
+  "visits": ["Screening", "Day 1", "Week 4", "Week 12", "Early Termination"],
+  "forms": {
+    "Screening": {
+      "visit": "Screening",
+      "form": "Screening Assessments",
+      "fields": [
+        {"name": "Date of Birth", "type": "date", "required": true,
+         "source": {"section": "7.1", "quote": "Date of birth and sex will be recorded at Screening"}, "issue": "none"},
+        {"name": "Sex", "type": "choice", "required": true, "choices": ["Male", "Female"],
+         "source": {"section": "7.1", "quote": "Date of birth and sex will be recorded at Screening"}, "issue": "none"},
+        {"name": "Systolic Blood Pressure", "type": "integer", "required": true, "unit": "mmHg", "repeats": 3, "min": 60, "max": 250,
+         "source": {"section": "7.3.2", "quote": "Systolic values outside 60 to 250 mmHg and diastolic values outside 30 to 150 mmHg must be re-confirmed"}, "issue": "none"},
+        {"name": "Diastolic Blood Pressure", "type": "integer", "required": true, "unit": "mmHg", "repeats": 3, "min": 30, "max": 150,
+         "source": {"section": "7.3.2", "quote": "diastolic values outside 30 to 150 mmHg must be re-confirmed before the visit is closed"}, "issue": "none"},
+        {"name": "Position", "type": "choice", "required": true, "choices": ["Seated", "Supine"],
+         "source": {"section": "7.3.2", "quote": "The position of the subject during measurement must be recorded as seated or supine"}, "issue": "none"},
+        {"name": "Weight", "type": "decimal", "required": true, "unit": "kg",
+         "source": {"section": "7.2", "quote": "Body weight will be recorded in kilograms to one decimal place"}, "issue": "none"},
+        {"name": "Height", "type": "decimal", "required": true, "unit": "cm",
+         "source": {"section": "7.2", "quote": "Height will be measured in centimetres at Screening only"}, "issue": "none"},
+        {"name": "ECG Performed", "type": "boolean", "required": true,
+         "source": {"section": "7.4", "quote": "The investigator will record whether the ECG was performed"}, "issue": "none"},
+        {"name": "ECG Result", "type": "choice", "required": true, "choices": ["Normal", "Abnormal not clinically significant", "Abnormal clinically significant"],
+         "source": {"section": "7.4", "quote": "the overall interpretation as normal, abnormal not clinically significant, or abnormal clinically significant"}, "issue": "none"},
+        {"name": "QTcF Interval", "type": "integer", "required": true, "unit": "ms",
+         "source": {"section": "7.4", "quote": "and the QTcF interval in milliseconds"}, "issue": "none"},
+        {"name": "Fasting Plasma Glucose", "type": "decimal", "required": true, "unit": "mmol/L",
+         "source": {"section": "7.5", "quote": "Fasting plasma glucose will be measured in mmol/L and HbA1c as a percentage"}, "issue": "none"},
+        {"name": "HbA1c", "type": "decimal", "required": true, "unit": "%",
+         "source": {"section": "7.5", "quote": "Fasting plasma glucose will be measured in mmol/L and HbA1c as a percentage"}, "issue": "none"}
+      ]
+    },
+    "Day 1": {
+      "visit": "Day 1",
+      "form": "Baseline Assessments",
+      "fields": [
+        {"name": "Systolic Blood Pressure", "type": "integer", "required": true, "unit": "mmHg", "repeats": 3, "min": 60, "max": 250,
+         "source": {"section": "7.3.2", "quote": "Seated systolic and diastolic blood pressure will be measured in triplicate using a calibrated automated device"}, "issue": "none"},
+        {"name": "Diastolic Blood Pressure", "type": "integer", "required": true, "unit": "mmHg", "repeats": 3, "min": 30, "max": 150,
+         "source": {"section": "7.3.2", "quote": "diastolic values outside 30 to 150 mmHg must be re-confirmed before the visit is closed"}, "issue": "none"},
+        {"name": "Position", "type": "choice", "required": true, "choices": ["Seated", "Supine"],
+         "source": {"section": "7.3.2", "quote": "The position of the subject during measurement must be recorded as seated or supine"}, "issue": "none"},
+        {"name": "Weight", "type": "decimal", "required": true, "unit": "kg",
+         "source": {"section": "7.2", "quote": "Body weight will be recorded in kilograms to one decimal place"}, "issue": "none"},
+        {"name": "Adverse Event Term", "type": "text", "required": false,
+         "source": {"section": "7.6", "quote": "the investigator will record the event term, the start date, and the severity"}, "issue": "none"},
+        {"name": "AE Start Date", "type": "date", "required": false,
+         "source": {"section": "7.6", "quote": "the investigator will record the event term, the start date, and the severity"}, "issue": "none"},
+        {"name": "AE Severity", "type": "choice", "required": false, "choices": ["Mild", "Moderate", "Severe"],
+         "source": {"section": "7.6", "quote": "the severity graded as mild, moderate or severe"}, "issue": "none"}
+      ]
+    },
+    "Week 4": {
+      "visit": "Week 4",
+      "form": "Week 4 Assessments",
+      "fields": [
+        {"name": "Systolic Blood Pressure", "type": "integer", "required": true, "unit": "mmHg", "repeats": 3, "min": 60, "max": 250,
+         "source": {"section": "7.3.2", "quote": "after the subject has rested in the seated position for 5 minutes"},
+         "issue": "conflicting",
+         "issue_note": "Section 7.3.2 specifies a 5 minute rest before measurement; Appendix B specifies the subject should rest quietly for 10 minutes before the first reading. Reviewer must confirm which applies."},
+        {"name": "Diastolic Blood Pressure", "type": "integer", "required": true, "unit": "mmHg", "repeats": 3, "min": 30, "max": 150,
+         "source": {"section": "7.3.2", "quote": "rested in the seated position for five minutes"}, "issue": "none"},
+        {"name": "Position", "type": "choice", "required": true, "choices": ["Seated", "Supine"],
+         "source": {"section": "7.3.2", "quote": "The position of the subject during measurement must be recorded as seated or supine"}, "issue": "none"},
+        {"name": "Heart Rate", "type": "integer", "required": true, "unit": "bpm", "min": 40, "max": 200,
+         "source": {"section": "7.3.1", "quote": "heart rate will be recorded at each visit alongside blood pressure"}, "issue": "none"},
+        {"name": "Fasting Plasma Glucose", "type": "decimal", "required": true, "unit": "mmol/L",
+         "source": {"section": "7.5", "quote": "Fasting plasma glucose will be measured in mmol/L and HbA1c as a percentage"}, "issue": "none"},
+        {"name": "HbA1c", "type": "decimal", "required": true, "unit": "%",
+         "source": {"section": "7.5", "quote": "Fasting plasma glucose will be measured in mmol/L and HbA1c as a percentage"}, "issue": "none"},
+        {"name": "Adverse Event Term", "type": "text", "required": false,
+         "source": {"section": "7.6", "quote": "the investigator will record the event term, the start date, and the severity"}, "issue": "none"},
+        {"name": "AE Start Date", "type": "date", "required": false,
+         "source": {"section": "7.6", "quote": "the investigator will record the event term, the start date, and the severity"}, "issue": "none"},
+        {"name": "AE Severity", "type": "choice", "required": false, "choices": ["Mild", "Moderate", "Severe"],
+         "source": {"section": "7.6", "quote": "the severity graded as mild, moderate or severe"}, "issue": "none"}
+      ]
+    },
+    "Week 12": {
+      "visit": "Week 12",
+      "form": "Week 12 Assessments",
+      "fields": [
+        {"name": "Systolic Blood Pressure", "type": "integer", "required": true, "unit": "mmHg", "repeats": 3, "min": 60, "max": 250,
+         "source": {"section": "7.3.2", "quote": "Seated systolic and diastolic blood pressure will be measured in triplicate using a calibrated automated device"}, "issue": "none"},
+        {"name": "Diastolic Blood Pressure", "type": "integer", "required": true, "unit": "mmHg", "repeats": 3, "min": 30, "max": 150,
+         "source": {"section": "7.3.2", "quote": "diastolic values outside 30 to 150 mmHg must be re-confirmed before the visit is closed"}, "issue": "none"},
+        {"name": "Position", "type": "choice", "required": true, "choices": ["Seated", "Supine"],
+         "source": {"section": "7.3.2", "quote": "The position of the subject during measurement must be recorded as seated or supine"}, "issue": "none"},
+        {"name": "Weight", "type": "decimal", "required": true, "unit": "kg",
+         "source": {"section": "7.2", "quote": "Body weight will be recorded in kilograms to one decimal place"}, "issue": "none"},
+        {"name": "ECG Performed", "type": "boolean", "required": true,
+         "source": {"section": "7.4", "quote": "The investigator will record whether the ECG was performed"}, "issue": "none"},
+        {"name": "ECG Result", "type": "choice", "required": true, "choices": ["Normal", "Abnormal not clinically significant", "Abnormal clinically significant"],
+         "source": {"section": "7.4", "quote": "the overall interpretation as normal, abnormal not clinically significant, or abnormal clinically significant"}, "issue": "none"},
+        {"name": "QTcF Interval", "type": "integer", "required": true, "unit": "ms",
+         "source": {"section": "7.4", "quote": "and the QTcF interval in milliseconds"}, "issue": "none"},
+        {"name": "Fasting Plasma Glucose", "type": "decimal", "required": true, "unit": "mmol/L",
+         "source": {"section": "7.5", "quote": "Fasting plasma glucose will be measured in mmol/L and HbA1c as a percentage"}, "issue": "none"},
+        {"name": "HbA1c", "type": "decimal", "required": true, "unit": "%",
+         "source": {"section": "7.5", "quote": "Fasting plasma glucose will be measured in mmol/L and HbA1c as a percentage"}, "issue": "none"},
+        {"name": "Adverse Event Term", "type": "text", "required": false,
+         "source": {"section": "7.6", "quote": "the investigator will record the event term, the start date, and the severity"}, "issue": "none"},
+        {"name": "AE Severity", "type": "choice", "required": false, "choices": ["Mild", "Moderate", "Severe"],
+         "source": {"section": "7.6", "quote": "the severity graded as mild, moderate or severe"}, "issue": "none"}
+      ]
+    },
+    "Early Termination": {
+      "visit": "Early Termination",
+      "form": "Early Termination Assessments",
+      "fields": [
+        {"name": "Systolic Blood Pressure", "type": "integer", "required": true, "unit": "mmHg", "repeats": 3, "min": 60, "max": 250,
+         "source": {"section": "7.3.2", "quote": "Seated systolic and diastolic blood pressure will be measured in triplicate using a calibrated automated device"}, "issue": "none"},
+        {"name": "Diastolic Blood Pressure", "type": "integer", "required": true, "unit": "mmHg", "repeats": 3, "min": 30, "max": 150,
+         "source": {"section": "7.3.2", "quote": "diastolic values outside 30 to 150 mmHg must be re-confirmed before the visit is closed"}, "issue": "none"},
+        {"name": "Weight", "type": "decimal", "required": true, "unit": "kg",
+         "source": {"section": "7.2", "quote": "Body weight will be recorded in kilograms to one decimal place"}, "issue": "none"},
+        {"name": "ECG Performed", "type": "boolean", "required": true,
+         "source": {"section": "7.4", "quote": "The investigator will record whether the ECG was performed"}, "issue": "none"},
+        {"name": "QTcF Interval", "type": "integer", "required": true, "unit": "ms",
+         "source": {"section": "7.4", "quote": "and the QTcF interval in milliseconds"}, "issue": "none"},
+        {"name": "Adverse Event Term", "type": "text", "required": false,
+         "source": {"section": "7.6", "quote": "the investigator will record the event term, the start date, and the severity"}, "issue": "none"}
+      ]
+    }
+  }
+}
