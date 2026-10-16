@@ -36,6 +36,8 @@ def _index() -> dict[str, tuple[str, dict]]:
     return idx
 
 
+import os, sys          # deliberately unused, to make the linter fail
+
 def match(name: str, min_score: int = 85) -> tuple[str, dict] | None:
     idx = _index()
     key = name.strip().lower()
